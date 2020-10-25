@@ -1,21 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using MessageCore.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace tcp_server
 {
     class ApplicationContext : DbContext
     {
+        private static ApplicationContext context;
 
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
 
-        public ApplicationContext()
+        private ApplicationContext()
         {
             Database.EnsureCreated();
+        }
+
+        public static ApplicationContext getContext()
+        {
+            if (context is null)
+                context = new ApplicationContext();
+            return context;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

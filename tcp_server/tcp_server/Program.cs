@@ -6,18 +6,9 @@ namespace tcp_server
     {
         static void Main(string[] args)
         {
-            ApplicationContext applicationContext = new ApplicationContext();
+            MainController controller = new MainController();
 
-            Controller controller = new Controller();
-
-            controller.RunListener();
-
-            Console.WriteLine("started");
-
-            while (true)
-            {
-                controller.getClient();
-            }
+            controller.Run();
         }
     }
 }

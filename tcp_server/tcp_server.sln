@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tcp_server", "tcp_server\tcp_server.csproj", "{C477BF59-2738-46BF-B206-69085CFC288B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageCore", "E:\Dell_7440\projects\C#\Messenger\MessageRequest\MessageRequest\MessageCore.csproj", "{D54711CC-03F7-4698-87D5-5F20FF943D53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C477BF59-2738-46BF-B206-69085CFC288B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C477BF59-2738-46BF-B206-69085CFC288B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C477BF59-2738-46BF-B206-69085CFC288B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D54711CC-03F7-4698-87D5-5F20FF943D53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D54711CC-03F7-4698-87D5-5F20FF943D53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D54711CC-03F7-4698-87D5-5F20FF943D53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D54711CC-03F7-4698-87D5-5F20FF943D53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

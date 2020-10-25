@@ -1,0 +1,2 @@
+C:\Users\Andru\git\tcp_server\tcp_server\tcp_server\Fakes\MessageCore.fakes : warning : Cannot generate stub for MessageRequest.RequestType: type is a value type.
+C:\Users\Andru\git\tcp_server\tcp_server\tcp_server\Fakes\MessageCore.fakes : warning : Cannot generate shim for MessageRequest.RequestType: type is an enum.
