@@ -6,7 +6,7 @@ namespace tcp_server
     {
         static void Main(string[] args)
         {
-            MainController controller = new MainController();
+            ConnectionController controller = new ConnectionController();
 
             controller.Run();
         }

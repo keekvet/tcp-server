@@ -27,5 +27,6 @@ namespace tcp_server
         {
             return config.GetConnectionString(name);
         }
+
     }
 }
