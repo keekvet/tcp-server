@@ -12,9 +12,7 @@ namespace tcp_server.Controllers
 {
     class MessageController : BaseController
     {
-        private MessageController() { }
-
-        new public static void Handle(string data)
+        new public static void Handle(string data, Connection connection)
         {
             Message message = RequestConverter.DecomposeMessage(data);
 
@@ -23,15 +21,25 @@ namespace tcp_server.Controllers
             try
             {
                 Connection receiverConnection = ConnectionController.Connections
-                    .Where(c => c.ConnectedUser.Name == message.Receiver.Name).First();
+                    .FirstOrDefault(c => c.ConnectedUser.Name == message.Receiver.Name);
 
+                if (receiverConnection is null)
+                    MessageService.SaveMessage(message);
+                else
                 Package.Write(
                         receiverConnection.TcpClient.GetStream(),
                         RequestConverter.ComposeMessage(message));
             }
-            catch (InvalidOperationException)
+            catch (Exception ex)
             {
-                MessageService.SaveMessage(message);
+                if (ex is NullReferenceException || ex is InvalidOperationException)
+                    MessageService.SaveMessage(message);
+                
+                // here i got exception; i must correct it;
+                //else
+                    //throw;
+
+                Console.WriteLine(ex.Message);
             }
         }
 

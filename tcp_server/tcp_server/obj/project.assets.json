@@ -1519,20 +1519,6 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
-      },
-      "MessageCore/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "3.1.9",
-          "Newtonsoft.Json": "12.0.3"
-        },
-        "compile": {
-          "bin/placeholder/MessageCore.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/MessageCore.dll": {}
-        }
       }
     }
   },
@@ -5681,16 +5667,10 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
-    },
-    "MessageCore/1.0.0": {
-      "type": "project",
-      "path": "E:\\Dell_7440\\projects\\C#\\Messenger\\MessageRequest\\MessageRequest\\MessageCore.csproj",
-      "msbuildProject": "E:\\Dell_7440\\projects\\C#\\Messenger\\MessageRequest\\MessageRequest\\MessageCore.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "MessageCore >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 3.1.9",
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.9",
       "Microsoft.Extensions.Configuration.Json >= 3.1.9",
@@ -5699,7 +5679,8 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Andru\\.nuget\\packages\\": {}
+    "C:\\Users\\Andru\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -5710,9 +5691,13 @@
       "packagesPath": "C:\\Users\\Andru\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Andru\\git\\tcp_server\\tcp_server\\tcp_server\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Microsoft\\Xamarin\\NuGet\\"
+      ],
       "configFilePaths": [
         "C:\\Users\\Andru\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
@@ -5723,11 +5708,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {
-            "E:\\Dell_7440\\projects\\C#\\Messenger\\MessageRequest\\MessageRequest\\MessageCore.csproj": {
-              "projectPath": "E:\\Dell_7440\\projects\\C#\\Messenger\\MessageRequest\\MessageRequest\\MessageCore.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -5775,7 +5756,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
       }
     }
   }

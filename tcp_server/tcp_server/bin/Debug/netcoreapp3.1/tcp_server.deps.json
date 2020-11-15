@@ -8,12 +8,12 @@
     ".NETCoreApp,Version=v3.1": {
       "tcp_server/1.0.0": {
         "dependencies": {
-          "MessageCore": "1.0.0",
           "Microsoft.EntityFrameworkCore": "3.1.9",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.9",
           "Microsoft.Extensions.Configuration.Json": "3.1.9",
           "Microsoft.QualityTools.Testing.Fakes": "16.7.4-beta.20330.2",
-          "Newtonsoft.Json": "12.0.3"
+          "Newtonsoft.Json": "12.0.3",
+          "MessageCore": "1.0.0.0"
         },
         "runtime": {
           "tcp_server.dll": {}
@@ -1096,13 +1096,12 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
-      "MessageCore/1.0.0": {
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "3.1.9",
-          "Newtonsoft.Json": "12.0.3"
-        },
+      "MessageCore/1.0.0.0": {
         "runtime": {
-          "MessageCore.dll": {}
+          "MessageCore.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
@@ -1834,8 +1833,8 @@
       "path": "system.xml.xmlserializer/4.3.0",
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
     },
-    "MessageCore/1.0.0": {
-      "type": "project",
+    "MessageCore/1.0.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

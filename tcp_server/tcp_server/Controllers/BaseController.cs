@@ -8,7 +8,7 @@ namespace tcp_server.Controllers
 {
     abstract class BaseController
     {
-        public static void Handle(string data)
+        public static void Handle(string data, Connection connection)
         {
             throw new NotImplementedException();
         }

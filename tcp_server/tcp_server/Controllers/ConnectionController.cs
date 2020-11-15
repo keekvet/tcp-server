@@ -19,16 +19,22 @@ namespace tcp_server
     {
         private TcpListener server;
 
-        private static ConcurrentBag<Connection> connections;
-        public static ConcurrentBag<Connection> Connections { get => connections; }
+        public static ConcurrentBag<Connection> Connections { get; private set; }
 
         public ConnectionController()
         {
-            connections = new ConcurrentBag<Connection>();
+            Connections = new ConcurrentBag<Connection>();
         }
 
         public void Run()
         {
+            ApplicationContext context = ApplicationContext.getContext();
+
+            foreach (var entity in context.ChangeTracker.Entries())
+            {
+                entity.Reload();
+            }
+
             int port = (int)Configuration.GetValue(typeof(int), "port");
             IPAddress ip = IPAddress.Parse((string)Configuration.GetValue(typeof(string), "IP"));
 
@@ -51,23 +57,10 @@ namespace tcp_server
 
     class Connection
     {
-        private TcpClient tcpClient;
-        public TcpClient TcpClient
-        {
-            get { return tcpClient; }
-        }
+        public TcpClient TcpClient { get; private set; }
+        public User ConnectedUser { get; set; }
 
-
-        private User user;
-        public User ConnectedUser
-        {
-            get { return user; }
-        }
-
-        public Connection(TcpClient client)
-        {
-            this.tcpClient = client;
-        }
+        public Connection(TcpClient client) { TcpClient = client; }
 
         public void StartSession()
         {
@@ -79,29 +72,32 @@ namespace tcp_server
             {
                 Console.WriteLine("new client");
 
-                networkStream = tcpClient.GetStream();
-
-                receivedPackage = Package.Read(networkStream);
-
-                if (user is null && (RequestConverter.GetRequestType(receivedPackage) == RequestType.GetAllStoredMessages))
-                {
-                    user = RequestConverter.DecomposeUser(RequestConverter.GetData(receivedPackage));
-                    GetAllStoredMessagesController.Handle(RequestConverter.GetData(receivedPackage));
-                }
+                networkStream = TcpClient.GetStream();
 
                 while (true)
                 {
                     receivedPackage = Package.Read(networkStream);
+                    RequestType type;
+                    try
+                    {
+                        type = RequestConverter.GetRequestType(receivedPackage);
+                    }
+                    catch(FormatException foEx)
+                    {
+                        continue;
+                    }
+                    Console.WriteLine(type);
+                    try
+                    {
+                        Type selectedController = GetControllerByRequestType(type);
 
-                    Console.WriteLine("received package: " + receivedPackage);
-                    RequestType type = RequestConverter.GetRequestType(receivedPackage);
-
-                    Type selectedController = GetControllerByRequestType(type);
-                    Console.WriteLine(nameof(BaseController.Handle));
-                    if(selectedController != null)
                         selectedController.GetMethod(nameof(BaseController.Handle))
-                            .Invoke(null, new object[] { RequestConverter.GetData(receivedPackage) } );
-                
+                            .Invoke(null, new object[] { RequestConverter.GetData(receivedPackage), this});
+                    }
+                    catch (ControllerNotFoundExeption contrNotFound)
+                    {
+                        Console.WriteLine(contrNotFound.Message);
+                    }
                 }
 
             }
@@ -111,44 +107,49 @@ namespace tcp_server
             }
             finally
             {
-                if (networkStream != null)
-                    networkStream.Close();
-                if (tcpClient != null)
-                    tcpClient.Close();
+                networkStream?.Close();
+                TcpClient?.Close();
 
                 Connection connection = this;
                 ConnectionController.Connections.TryTake(out connection);
 
-                Console.WriteLine(user.Name + " session ended");
+                Console.WriteLine(ConnectedUser.Name + " session ended");
             }
         }
-
-        //private string Read()
-        //{
-        //    int bytesRead;
-        //    bytesRead = tcpClient.GetStream().Read(buffer, 0, buffer.Length);
-        //    return Encoding.UTF8.GetString(buffer, 0, bytesRead);
-        //}
 
         private Type GetControllerByRequestType(RequestType type)
         {
-            switch (type)
-            {
-                //case RequestType.Alive:
-                //    break;
-                case RequestType.Registration:
-                    return typeof(RegistrationController);
-                case RequestType.SendMessage:
-                    return typeof(MessageController);
-                case RequestType.GetAllStoredMessages:
-                    return typeof(GetAllStoredMessagesController);
-                //case RequestType.CheckUserExist:
-                //    break;
-                //case RequestType.CheckUserExistResult:
-                //    break;
-                default:
-                    return null;
-            }
+            if (ConnectedUser is null)
+                switch (type)
+                {
+                    case RequestType.Login:
+                        return typeof(LoginController);
+                    case RequestType.Registration:
+                        return typeof(LoginController);
+                    default:
+                        throw new ControllerNotFoundExeption("not authenticated user");
+                }
+            else
+                switch (type)
+                {
+                    case RequestType.SendMessage:
+                        return typeof(MessageController);
+                    case RequestType.GetAllStoredMessages:
+                        return typeof(GetAllStoredMessagesController);
+                    case RequestType.GetAllStoredMessagesResponse:
+                        return typeof(GetAllStoredMessagesResponseController);
+                    case RequestType.CheckUserExist:
+                        return typeof(CheckUserExistController);
+                    default:
+                        throw new ControllerNotFoundExeption("controller for request not found");
+                }
         }
+    }
+
+    class ControllerNotFoundExeption : Exception
+    {
+        public ControllerNotFoundExeption() { }
+        public ControllerNotFoundExeption(string message) : base(message) { }
+        public ControllerNotFoundExeption(string message, Exception inner) : base(message, inner) { }
     }
 }

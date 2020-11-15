@@ -24,15 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="E:\Dell_7440\projects\C#\Messenger\MessageRequest\MessageRequest\MessageCore.csproj">
-      <Private>true</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
-    </ProjectReference>
+    <AdditionalDesignTimeBuildInput Remove="FakesAssemblies\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalDesignTimeBuildInput Remove="FakesAssemblies\**" />
+    <Reference Include="MessageCore">
+      <HintPath>E:\Dell_7440\projects\C#\MessageCore\MessageCore\obj\Debug\netstandard2.0\MessageCore.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

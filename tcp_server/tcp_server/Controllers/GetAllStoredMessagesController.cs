@@ -2,8 +2,10 @@
 using MessageRequest;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using tcp_server.Services;
 
@@ -11,30 +13,32 @@ namespace tcp_server.Controllers
 {
     class GetAllStoredMessagesController : BaseController
     {
-        new public static void Handle(string data)
+        new public static void Handle(string data, Connection connection)
         {
-            User sender = RequestConverter.DecomposeUser(data);
-            List<Message> messages = MessageService.GetMessagesAdressedTo(sender.Name);
+            List<Message> messages = MessageService.GetMessagesAdressedTo(connection.ConnectedUser.Name);
 
             try
             {
-                Connection senderConnection = ConnectionController.Connections
-                    .Where(c => c.ConnectedUser.Name == sender.Name).First();
 
                 foreach (Message messageToSend in messages)
                 {
-                    
+
                     Package.Write(
-                        senderConnection.TcpClient.GetStream(), 
+                        connection.TcpClient.GetStream(),
                         RequestConverter.ComposeMessage(messageToSend));
                 }
+                Thread.Sleep(10);
+                Package.Write(
+                    connection.TcpClient.GetStream(),
+                    RequestConverter.ComposeGetAllMessagesResponse());
             }
-            catch (InvalidOperationException e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                if (ex is NullReferenceException || ex is InvalidOperationException)
+                    Console.WriteLine(ex);
+                else
+                    throw;
             }
-
-            
         }
     }
 }
