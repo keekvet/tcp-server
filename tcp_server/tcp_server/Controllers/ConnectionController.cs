@@ -81,18 +81,11 @@ namespace tcp_server
                     try
                     {
                         type = RequestConverter.GetRequestType(receivedPackage);
-                    }
-                    catch(FormatException foEx)
-                    {
-                        continue;
-                    }
-                    Console.WriteLine(type);
-                    try
-                    {
+                        Console.WriteLine(type);
                         Type selectedController = GetControllerByRequestType(type);
 
                         selectedController.GetMethod(nameof(BaseController.Handle))
-                            .Invoke(null, new object[] { RequestConverter.GetData(receivedPackage), this});
+                            .Invoke(null, new object[] { RequestConverter.GetData(receivedPackage), this });
                     }
                     catch (ControllerNotFoundExeption contrNotFound)
                     {
@@ -104,6 +97,10 @@ namespace tcp_server
             catch (IOException ioEx)
             {
                 Console.WriteLine(ioEx.Message);
+            }
+            catch (FormatException foEx)
+            {
+                Console.WriteLine(foEx.Message);
             }
             finally
             {

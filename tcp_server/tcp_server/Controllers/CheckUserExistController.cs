@@ -12,12 +12,12 @@ namespace tcp_server.Controllers
     {
         new public static void Handle(string data, Connection connection)
         {
-            string userToFind = RequestConverter.DecompostUserExist(data);
+            string userToFind = RequestConverter.DecomposeUserExist(data);
             User user = UserService.FindUser(userToFind);
             try
             {
                 Package.Write(connection.TcpClient.GetStream(),
-                    RequestConverter.ComposeUserExistResult(!(user is null)));
+                    RequestConverter.ComposeUserExistResponse(!(user is null)));
 
             }
             catch (Exception ex)
