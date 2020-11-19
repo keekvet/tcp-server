@@ -35,16 +35,15 @@ namespace tcp_server
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<Message>()
+                //.HasOne<User>("Sender")
+                //.WithMany()
+                //.OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Message>()
-                .HasOne<User>("Sender")
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Message>()
-                .HasOne<User>("Receiver")
-                .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<Message>()
+                //.HasOne<User>("Receiver")
+                //.WithMany()
+                //.OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

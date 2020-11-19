@@ -20,24 +20,29 @@ namespace tcp_server.Controllers
 
             try
             {
-                Connection receiverConnection = ConnectionController.Connections
-                    .FirstOrDefault(c => c.ConnectedUser.Name == message.Receiver.Name);
-
-                if (receiverConnection is null)
-                    MessageService.SaveMessage(message);
-                else
+                MessageService.SaveMessageIfLocalIdUnique(message);
+                message = MessageService.GetMessageById(message.Id);
+                
                 Package.Write(
-                        receiverConnection.TcpClient.GetStream(),
-                        RequestConverter.ComposeMessage(message));
+                    connection.TcpClient.GetStream(), 
+                    RequestConverter.ComposeMessageSyncInfo(message.Id, message.SenderLocalId, message.SendedTime));
+
+                Connection receiverConnection = ConnectionController.Connections
+                    .FirstOrDefault(c => c.ConnectedUser.Name == message.Receiver);
+
+                if (!(receiverConnection is null))
+                    Package.Write(
+                            receiverConnection.TcpClient.GetStream(),
+                            RequestConverter.ComposeMessage(message));
             }
             catch (Exception ex)
             {
                 if (ex is NullReferenceException || ex is InvalidOperationException)
-                    MessageService.SaveMessage(message);
-                
+                    //MessageService.SaveMessage(message);
+
                 // here i got exception; i must correct it;
                 //else
-                    //throw;
+                //throw;
 
                 Console.WriteLine(ex.Message);
             }

@@ -27,10 +27,10 @@ namespace tcp_server.Controllers
                         connection.TcpClient.GetStream(),
                         RequestConverter.ComposeMessage(messageToSend));
                 }
-                Thread.Sleep(10);
-                Package.Write(
-                    connection.TcpClient.GetStream(),
-                    RequestConverter.ComposeGetAllMessagesResponse());
+                //Thread.Sleep(10);
+                //Package.Write(
+                //    connection.TcpClient.GetStream(),
+                //    RequestConverter.ComposeGetAllMessagesResponse());
             }
             catch (Exception ex)
             {

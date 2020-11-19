@@ -78,19 +78,13 @@ namespace tcp_server
                 {
                     receivedPackage = Package.Read(networkStream);
                     RequestType type;
-                    try
-                    {
-                        type = RequestConverter.GetRequestType(receivedPackage);
-                        Console.WriteLine(type);
-                        Type selectedController = GetControllerByRequestType(type);
+                    type = RequestConverter.GetRequestType(receivedPackage);
+                    Console.WriteLine(type);
+                    Type selectedController = GetControllerByRequestType(type);
 
-                        selectedController.GetMethod(nameof(BaseController.Handle))
-                            .Invoke(null, new object[] { RequestConverter.GetData(receivedPackage), this });
-                    }
-                    catch (ControllerNotFoundExeption contrNotFound)
-                    {
-                        Console.WriteLine(contrNotFound.Message);
-                    }
+                    selectedController.GetMethod(nameof(BaseController.Handle))
+                        .Invoke(null, new object[] { RequestConverter.GetData(receivedPackage), this });
+
                 }
 
             }
@@ -102,6 +96,10 @@ namespace tcp_server
             {
                 Console.WriteLine(foEx.Message);
             }
+            catch (ControllerNotFoundExeption contrNotFound)
+            {
+                Console.WriteLine(contrNotFound.Message);
+            }
             finally
             {
                 networkStream?.Close();
@@ -109,8 +107,6 @@ namespace tcp_server
 
                 Connection connection = this;
                 ConnectionController.Connections.TryTake(out connection);
-
-                Console.WriteLine(ConnectedUser.Name + " session ended");
             }
         }
 
@@ -133,10 +129,12 @@ namespace tcp_server
                         return typeof(MessageController);
                     case RequestType.GetAllStoredMessages:
                         return typeof(GetAllStoredMessagesController);
-                    case RequestType.GetAllStoredMessagesResponse:
-                        return typeof(GetAllStoredMessagesResponseController);
                     case RequestType.CheckUserExist:
                         return typeof(CheckUserExistController);
+                    case RequestType.MessageReceived:
+                        return typeof(MessageReceivedController);
+                    case RequestType.MessageSynchronised:
+                        return typeof(MessageSynchronisedController);
                     default:
                         throw new ControllerNotFoundExeption("controller for request not found");
                 }

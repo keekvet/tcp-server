@@ -2,18 +2,19 @@
 using MessageRequest;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using tcp_server.Services;
 
 namespace tcp_server.Controllers
 {
-    class GetAllStoredMessagesResponseController : BaseController
+    class MessageReceivedController : BaseController
     {
         new public static void Handle(string data, Connection connection)
         {
-            MessageService.DeleteMessagesWithReceiver(connection.ConnectedUser.Name);
+            Message message = MessageService.GetMessageById(RequestConverter.DecomposeMessageReceived(data));
+            message.State |= MessageState.ReceiverReceived;
+
+            MessageService.CheckAndHandleMessageState(message);
         }
     }
 }
